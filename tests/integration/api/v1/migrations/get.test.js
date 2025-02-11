@@ -1,14 +1,13 @@
-import database from "infra/database";
 import orchestrator from "../orchestrator.js";
 
 beforeAll(async () => {
   await orchestrator.waitForAllServices();
-  await database.query("drop schema public cascade; create schema public;");
+  await orchestrator.clearDatabase();
 });
 
-describe("POST /api/v1/migrations", () => {
+describe("GET /api/v1/migrations", () => {
   describe("Anonymous user", () => {
-    test("GET to /api/v1/migrations should return 200", async () => {
+    test("Running pending migrations", async () => {
       const response = await fetch("http://localhost:3000/api/v1/migrations");
       expect(response.status).toBe(200);
 
